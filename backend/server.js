@@ -8,12 +8,14 @@ app.use(express.json());
 
 let todos = [];
 
-// Lấy danh sách todos
+app.get('/', (req, res) => {
+    res.send('Welcome to the Todo API! Use /todos to access the API.');
+});
+
 app.get('/todos', (req, res) => {
     res.json(todos);
 });
 
-// Thêm todo mới
 app.post('/todos', (req, res) => {
     const { task } = req.body;
     const newTodo = { id: todos.length + 1, task };
@@ -21,7 +23,6 @@ app.post('/todos', (req, res) => {
     res.status(201).json(newTodo);
 });
 
-// Xóa todo
 app.delete('/todos/:id', (req, res) => {
     const id = parseInt(req.params.id);
     todos = todos.filter(todo => todo.id !== id);
