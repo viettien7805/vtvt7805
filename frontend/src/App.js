@@ -25,7 +25,7 @@ function App() {
 
     // Xóa todo
     const deleteTodo = (id) => {
-        fetch(`http://localhost:5000/todos/${id}`, { method: 'DELETE' })
+        fetch(`https://vtvt7805.onrender.com`, { method: 'DELETE' })
             .then(() => setTodos(todos.filter(todo => todo.id !== id)));
     };
 
