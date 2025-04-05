@@ -6,27 +6,40 @@ function App() {
 
     // Lấy danh sách todos từ API
     useEffect(() => {
-        fetch('http://localhost:5000/todos')
+        fetch('https://vtvt7805.onrender.com/todos')
             .then(res => res.json())
-            .then(data => setTodos(data));
+            .then(data => setTodos(data))
+            .catch(err => console.error('Error fetching todos:', err));
     }, []);
 
     // Thêm todo
     const addTodo = () => {
-        fetch('https://vtvt7805.onrender.com', {
+        fetch('https://vtvt7805.onrender.com/todos', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ task })
         })
-            .then(res => res.json())
-            .then(newTodo => setTodos([...todos, newTodo]));
-        setTask('');
+            .then(res => {
+                if (!res.ok) throw new Error('Failed to add todo');
+                return res.json();
+            })
+            .then(newTodo => {
+                setTodos([...todos, newTodo]);
+                setTask('');
+            })
+            .catch(err => console.error('Error adding todo:', err));
     };
 
     // Xóa todo
     const deleteTodo = (id) => {
-        fetch(`https://vtvt7805.onrender.com`, { method: 'DELETE' })
-            .then(() => setTodos(todos.filter(todo => todo.id !== id)));
+        fetch(`https://vtvt7805.onrender.com/todos/${id}`, {
+            method: 'DELETE'
+        })
+            .then(res => {
+                if (!res.ok) throw new Error('Failed to delete todo');
+                setTodos(todos.filter(todo => todo.id !== id));
+            })
+            .catch(err => console.error('Error deleting todo:', err));
     };
 
     return (
